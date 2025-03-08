@@ -4,6 +4,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+st.title("Analisis Data")
+
 def monthly_count(df):
     monthly_count = df.groupby(['yr', 'mnth'])['cnt'].sum().reset_index()
     monthly_count['yr'] = monthly_count['yr'].map({0: 2011, 1: 2012})
