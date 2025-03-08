@@ -4,7 +4,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-st.title("Analisis Data")
 
 def monthly_count(df):
     monthly_count = df.groupby(['yr', 'mnth'])['cnt'].sum().reset_index()
@@ -111,7 +110,7 @@ with col1:
         st.write('Musim yang memiliki jumlah penyewa paling tinggi adalah musim gugur sedangkan yang memiliki jumlah penyewa paling sedikit adalah musim semi')
 
 with col2:
-    st.write(f"**Pengaruh Musim Terhadap Total Penyewaan :thermometer:**")
+    st.write(f"**Pengaruh Suhu Terhadap Total Penyewaan :thermometer:**")
 
     fig, ax = plt.subplots(figsize=(20, 18))
  
