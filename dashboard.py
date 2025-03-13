@@ -173,15 +173,17 @@ else :
         marker='o',
         data= filtered_data,
         palette="coolwarm",
+        linewidth = 5,
+        markersize= 14,
         ax=ax
     )
 
-    ax.set_title("Jumlah Tren Penyewaan Sepeda dari Tahun 2011 hingga 2012", loc="center", fontsize=24, pad=20)
-    ax.set_ylabel('Total Penyewaan', fontsize=18)
-    ax.set_xlabel('Periode (Tahun-Bulan)', fontsize=18)
-
-    plt.setp(ax.get_xticklabels(), rotation=45, ha='right', fontsize=12)  # rotasi label X agar tidak bertumpuk
-    ax.tick_params(axis='y', labelsize=14)
+    ax.set_title("Jumlah Tren Penyewaan Sepeda dari Tahun 2011 hingga 2012", loc="center", fontsize=30, pad=20)
+    ax.set_ylabel('Total Penyewaan', fontsize=30)
+    ax.set_xlabel('Periode (Tahun-Bulan)', fontsize=35)
+    plt.setp(ax.get_xticklabels(), rotation=45, ha='right', fontsize=18) 
+    ax.tick_params(axis='y', labelsize=25)
+    ax.tick_params(axis='x', labelsize=25, rotation=45)
 
     st.pyplot(fig)
 
