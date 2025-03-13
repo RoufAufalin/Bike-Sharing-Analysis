@@ -185,8 +185,6 @@ else :
 
     st.pyplot(fig)
 
-with st.expander('Oi'):
-    st.write('Lorem ipsum dolor sit amet')
 
 
 st.caption('Copyright (c) Rouf Semangat 2025')
