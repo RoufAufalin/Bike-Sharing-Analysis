@@ -44,6 +44,7 @@ def temperature(df):
     return temp_df
 
 df = pd.read_csv('dashboard.csv')
+df['dteday'] = pd.to_datetime(df['dteday'])
 
 monthly_count_df = monthly_count(df)
 season_df = season(df)
@@ -130,6 +131,62 @@ with col2:
 
     with st.expander('Penjelasan'):
         st.write('Pada jumlah penyewa yang telah dikelompokan berdasarkan suhu dengan kriteria 0 - 0.3(dingin), 0.3 - 0.6(sejuk) dan 0.6-1.0 panas. Hal ini menunjukan bahwa pada suhu dingin hanya sedikit total saja penyewaan sepeda sedangkan untuk suhu yang cenderung hangat cenderung lebih banyak')
+
+
+st.header('Tren Penyewaan dari tahun 2011 hingga tahun 2012')
+
+monthly_trend = df.groupby(['yr', 'mnth'])['cnt'].sum().reset_index()
+monthly_trend['year'] = monthly_trend['yr'].map({0: 2011, 1: 2012})
+
+monthly_trend['period'] = monthly_trend['year'].astype(str) + '-' + monthly_trend['mnth'].astype(str).str.zfill(2)
+
+monthly_trend['period'] = pd.to_datetime(monthly_trend['period'])
+
+
+min_date = monthly_trend['period'].min().date()  
+max_date = monthly_trend['period'].max().date()
+
+
+start_date, end_date = st.date_input(
+    label="Rentang Waktu", 
+    min_value=min_date, 
+    max_value=max_date,
+    value=[min_date, max_date]
+)
+
+
+filtered_data = monthly_trend[
+    (monthly_trend['period'].dt.date >= start_date) & 
+    (monthly_trend['period'].dt.date <= end_date)
+]
+
+
+if filtered_data.empty:
+    st.warning("Data tidak ditemukan pada rentang waktu yang dipilih.")
+else :
+
+    fig, ax = plt.subplots(figsize=(20, 18))
+
+    sns.lineplot(
+        x=filtered_data['period'], 
+        y=filtered_data['cnt'],
+        marker='o',
+        data= filtered_data,
+        palette="coolwarm",
+        ax=ax
+    )
+
+    ax.set_title("Jumlah Tren Penyewaan Sepeda dari Tahun 2011 hingga 2012", loc="center", fontsize=24, pad=20)
+    ax.set_ylabel('Total Penyewaan', fontsize=18)
+    ax.set_xlabel('Periode (Tahun-Bulan)', fontsize=18)
+
+    plt.setp(ax.get_xticklabels(), rotation=45, ha='right', fontsize=12)  # rotasi label X agar tidak bertumpuk
+    ax.tick_params(axis='y', labelsize=14)
+
+    st.pyplot(fig)
+
+with st.expander('Oi'):
+    st.write('Lorem ipsum dolor sit amet')
 
 
 st.caption('Copyright (c) Rouf Semangat 2025')
