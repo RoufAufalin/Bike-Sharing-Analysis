@@ -7,35 +7,28 @@ import seaborn as sns
 
 def monthly_count(df):
     monthly_count = df.groupby(['yr', 'mnth'])['cnt'].sum().reset_index()
-    monthly_count['yr'] = monthly_count['yr'].map({0: 2011, 1: 2012})
-
-    # Mapping lengkap untuk semua bulan
     mapping_month = {
         1: "Januari", 2: "Februari", 3: "Maret", 4: "April",
         5: "Mei", 6: "Juni", 7: "Juli", 8: "Agustus",
         9: "September", 10: "Oktober", 11: "November", 12: "Desember"
     }
 
-    # Ubah angka bulan ke nama bulan
     monthly_count['mnth'] = monthly_count['mnth'].map(mapping_month)
+    
+    # Set kolom 'mnth' sebagai kategori terurut
+    bulan_order = ["Januari", "Februari", "Maret", "April", "Mei", "Juni",
+                "Juli", "Agustus", "September", "Oktober", "November", "Desember"]
+    monthly_count['mnth'] = pd.Categorical(monthly_count['mnth'], categories=bulan_order, ordered=True)
+
 
     return monthly_count
 
 def season(df):
-    season_mapping = {
-        1: "Spring",
-        2: "Summer",
-        3: "Fall",
-        4: "Winter"
-    }
-
     season_df = df.groupby('season')['cnt'].sum().reset_index()
-    season_df['season'] = season_df['season'].map(season_mapping)
-
     return season_df
 
 def temperature(df):
-    bins_temp = [0, 0.3, 0.6, 1.0]  # Sesuai rentang suhu
+    bins_temp = [0, 0.3, 0.6, 1.0]  
     labels_temp = ['Dingin', 'Sejuk', 'Panas']
 
     df['temp_group'] = pd.cut(df['temp'], bins=bins_temp, labels=labels_temp)
@@ -136,9 +129,8 @@ with col2:
 st.header('Tren Penyewaan dari tahun 2011 hingga tahun 2012')
 
 monthly_trend = df.groupby(['yr', 'mnth'])['cnt'].sum().reset_index()
-monthly_trend['year'] = monthly_trend['yr'].map({0: 2011, 1: 2012})
 
-monthly_trend['period'] = monthly_trend['year'].astype(str) + '-' + monthly_trend['mnth'].astype(str).str.zfill(2)
+monthly_trend['period'] = monthly_trend['yr'].astype(str) + '-' + monthly_trend['mnth'].astype(str).str.zfill(2)
 
 monthly_trend['period'] = pd.to_datetime(monthly_trend['period'])
 
